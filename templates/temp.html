@@ -16,12 +16,24 @@
                     {% if car['photo'] %}
                         <img src="{{car['photo']}}" alt="...">
                     {% endif %}
+                    {% if car['year'] %}
+                            Год: {{ car['year'] }}
+                    {% endif %}
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title"><a href={{car['link']}} target="_blank">{{ car['title'] }}</a></h5>
+                        {% if not car['link']%}
+                            <h5 class="card-title">{{ car['title'] }}</h5>
+                        {% else %}
+                            <h5 class="card-title"><a href={{car['link']}} target="_blank">{{ car['title'] }}</a></h5>
+                        {% endif %}
                         <p class="card-text"><h2>{{ car['price'] }}</h2></p>
                     </div>
+                </div>
+                <div class="col-xs-2">
+                    {% if 'auto.ru' in car['link'] %}
+                        <img src="/static/autoru.png" alt="...">
+                    {% endif %}
                 </div>
             </div>
         </div>

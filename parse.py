@@ -4,14 +4,16 @@ import requests
 
 class Car_Parse():
     def __init__(self, n):
-        self.r = requests.get(n)
-        self.r.encoding = 'utf8'
-        self.soup = BeautifulSoup(self.r.text, 'html.parser')
-        self.sp = []
-        print(self.soup.select('.ListingPagination-module__container a')[-3])
+        self.name_of_car = n
 
-    def parse(self):
-        for i in self.soup.select('.ListingItem-module__main'):
+    def autoru_parse(self):
+        name = 'https://auto.ru/sankt-peterburg/cars/{}/all/'.format(self.name_of_car)
+        r = requests.get(name)
+        r.encoding = 'utf8'
+        soup = BeautifulSoup(r.text, 'html.parser')
+        list_of_cars = []
+        for i in soup.select('.ListingItem-module__main'):
+            year = i.select_one('.ListingItem-module__year')
             link = i.select_one('.ListingItemTitle-module__link')
             photo = i.select_one('.Brazzers__image')
             price = i.select_one('.ListingItemPrice-module__content')
@@ -19,25 +21,26 @@ class Car_Parse():
                 price = price.text
             else:
                 price = 0
-            print(photo)
             if photo != None:
-                self.sp.append({
+                list_of_cars.append({
                     'title': link.text,
                     'link': link['href'],
                     'photo': 'http:' + photo['data-src'],
+                    'year': year.text,
                     'price': price
                 })
             else:
-                self.sp.append({
+                list_of_cars.append({
                     'title': link.text,
                     'link': link['href'],
                     'photo': 0,
+                    'year': year.text,
                     'price': price
                 })
-        return self.sp
+        return list_of_cars
 
-print(Car_Parse('https://auto.ru/sankt-peterburg/cars/uaz/all/').parse())
+
 '''with open('car.json', mode='w') as wr:''' #json
-'''s = str(sp).replace("'", '"')
+'''s = str(list_of_cars).replace("'", '"')
 s = s.replace('}, {', '},\n{')
 wr.write(s)''' #json

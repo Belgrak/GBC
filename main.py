@@ -3,7 +3,7 @@ from parse import Car_Parse
 
 app = Flask(__name__)
 dic = {'Ь':'', 'ь':'', 'Ъ':'', 'ъ':'', 'А':'A', 'а':'a', 'Б':'B', 'б':'b', 'В':'V', 'в':'v',
-       'Г':'G', 'г':'g', 'Д':'D', 'д':'d', 'Е':'E', 'е':'e', 'Ё':'Yo', 'ё':'yo', 'Ж':'Zh', 'ж':'zh',
+       'Г':'G', 'г':'g', 'Д':'D', 'д':'d', 'Е':'E', 'е':'e', 'Ё':'Yo', 'ё':'yo', 'Ж':'Zh', 'ж':'g',
        'З':'Z', 'з':'z', 'И':'I', 'и':'i', 'Й':'Y', 'й':'y', 'К':'K', 'к':'k', 'Л':'L', 'л':'l',
        'М':'M', 'м':'m', 'Н':'N', 'н':'n', 'О':'O', 'о':'o', 'П':'P', 'п':'p', 'Р':'R', 'р':'r',
        'С':'S', 'с':'s', 'Т':'T', 'т':'t', 'У':'U', 'у':'u', 'Ф':'F', 'ф':'f', 'Х':'H', 'х':'h',
@@ -11,11 +11,11 @@ dic = {'Ь':'', 'ь':'', 'Ъ':'', 'ъ':'', 'А':'A', 'а':'a', 'Б':'B', 'б':'b
        'ы':'yi', 'Э':'E', 'э':'e', 'Ю':'Yu', 'ю':'yu', 'Я':'Ya', 'я':'ya'}
 
 
-@app.route('/some', methods=['POST'])
+@app.route('/cars', methods=['POST'])
 def get():
     t = request.form['marka']
     t = t.replace(' ', '_')
-    if t == 'ВАЗ (LADA)':
+    if t == 'ВАЗ_(LADA)':
         t = 'vaz'
     if t.lower()[0] in dic:
         t = ''.join([dic[i] for i in t.lower()])
@@ -23,9 +23,18 @@ def get():
         t = 'moscvich'
     if t == 'Mercedes-Benz':
         t = 'mercedes'
-    t = 'https://auto.ru/sankt-peterburg/cars/{}/all/'.format(t.lower())
+    t = t.lower()
     print(t)
-    return render_template('temp.html', cars=Car_Parse(t).parse())
+    if Car_Parse(t).autoru_parse():
+        return render_template('temp.html', cars=Car_Parse(t).autoru_parse())
+    else:
+        return render_template('temp.html', cars=[{
+                    'title': 'По вашему запросу ничего не найдено',
+                    'link': '',
+                    'photo': '',
+                    'year': '',
+                    'price': ''
+                }])
 
 
 
