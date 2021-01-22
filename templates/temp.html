@@ -14,10 +14,7 @@
             <div class="row g-0">
                 <div class="col-md-4">
                     {% if car['photo'] %}
-                        <img src="{{car['photo']}}" alt="...">
-                    {% endif %}
-                    {% if car['year'] %}
-                            Год: {{ car['year'] }}
+                        <img class="first_line" src="{{car['photo']}}" alt="...">
                     {% endif %}
                 </div>
                 <div class="col-md-8">
@@ -28,6 +25,15 @@
                             <h5 class="card-title"><a href={{car['link']}} target="_blank">{{ car['title'] }}</a></h5>
                         {% endif %}
                         <p class="card-text"><h2>{{ car['price'] }}</h2></p>
+                        {% if car['motor'] %}
+                            <div class="specifications">{{ car['motor'] }}</div>
+                        {% endif %}
+                        {% if car['year'] %}
+                            <span class="specifications">Год: {{ car['year'] }}</span>
+                        {% endif %}
+                        {% if car['km'] %}
+                            <span class="specifications">Пробег: {{ car['km'] }}</span>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-xs-2">

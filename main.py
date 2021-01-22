@@ -33,6 +33,8 @@ def get():
                     'link': '',
                     'photo': '',
                     'year': '',
+                    'km': '',
+                    'motor': '',
                     'price': ''
                 }])
 

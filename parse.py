@@ -13,6 +13,8 @@ class Car_Parse():
         soup = BeautifulSoup(r.text, 'html.parser')
         list_of_cars = []
         for i in soup.select('.ListingItem-module__main'):
+            motor = i.select_one('.ListingItemTechSummaryDesktop__cell')
+            km_age = i.select_one('.ListingItem-module__kmAge')
             year = i.select_one('.ListingItem-module__year')
             link = i.select_one('.ListingItemTitle-module__link')
             photo = i.select_one('.Brazzers__image')
@@ -27,6 +29,8 @@ class Car_Parse():
                     'link': link['href'],
                     'photo': 'http:' + photo['data-src'],
                     'year': year.text,
+                    'km': km_age.text,
+                    'motor': motor.text,
                     'price': price
                 })
             else:
@@ -35,6 +39,8 @@ class Car_Parse():
                     'link': link['href'],
                     'photo': 0,
                     'year': year.text,
+                    'km': km_age.text,
+                    'motor': motor.text,
                     'price': price
                 })
         return list_of_cars
