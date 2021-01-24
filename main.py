@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, make_response
-from parse import Car_Parse
+from parse import *
 
 app = Flask(__name__)
 dic = {'Ь':'', 'ь':'', 'Ъ':'', 'ъ':'', 'А':'A', 'а':'a', 'Б':'B', 'б':'b', 'В':'V', 'в':'v',
@@ -25,8 +25,8 @@ def get():
         t = 'mercedes'
     t = t.lower()
     print(t)
-    if Car_Parse(t).autoru_parse():
-        return render_template('temp.html', cars=Car_Parse(t).autoru_parse())
+    if avito_parse(t):
+        return render_template('temp.html', cars=avito_parse(t))
     else:
         return render_template('temp.html', cars=[{
                     'title': 'По вашему запросу ничего не найдено',
@@ -37,7 +37,6 @@ def get():
                     'motor': '',
                     'price': ''
                 }])
-
 
 
 @app.route('/')
