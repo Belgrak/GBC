@@ -25,8 +25,8 @@ def get():
         t = 'mercedes'
     t = t.lower()
     print(t)
-    if avito_parse(t):
-        return render_template('temp.html', cars=avito_parse(t))
+    if autoru_parse(t):
+        return render_template('temp.html', cars=autoru_parse(t))
     else:
         return render_template('temp.html', cars=[{
                     'title': 'По вашему запросу ничего не найдено',
