@@ -42,16 +42,35 @@ def autoru_parse(n):
     return list_of_cars
 
 
+def proxy_us_ag():
+    r = requests.get('https://hidemy.name/ru/proxy-list/')
+    soup = BeautifulSoup(r.text, 'html.parser')
+    sp = []
+    print(soup.select('.table_block'))
+    for i in soup.select('.table_block tbody tr'):
+        print(i)
+        sp.append(':'.join([t.text for t in i.select('td')]))
+    print(sp)
+
+
 def avito_parse(n):
     if n == 'mercedes':
         n = 'mercedes-benz'
     if n == 'vaz':
         n = 'vaz_lada'
     name = 'https://www.avito.ru/sankt-peterburg/avtomobili/{}'.format(n)
-    r = requests.get(name)
+    proxy = {'http': 'http://' + '176.9.119.170:8080'}
+    with open('us_ag.txt', 'r') as f:
+        for i in map(str.strip, f.readlines()):
+            usr_ag = {'User-Agent': i}
+            r = requests.get(name, proxies=proxy, headers=usr_ag)
+            if str(r.status_code)[0] == '2':
+                break
     r.encoding = 'utf8'
     soup = BeautifulSoup(r.text, 'html.parser')
     list_of_cars = []
+    print(r.status_code, i)
+    print(soup)
     for i in soup.select('[data-marker="item"]'):
         km_motor = i.select('[data-marker="item-specific-params"]')[0]
         link = i.select('a')[1]
