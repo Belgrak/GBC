@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, make_response
 from parse import *
+import random
 
 app = Flask(__name__)
 dic = {'Ь':'', 'ь':'', 'Ъ':'', 'ъ':'', 'А':'A', 'а':'a', 'Б':'B', 'б':'b', 'В':'V', 'в':'v',
@@ -25,8 +26,13 @@ def get():
         t = 'mercedes'
     t = t.lower()
     print(t)
-    if autoru_parse(t):
-        return render_template('temp.html', cars=autoru_parse(t))
+    autoru, autoru_pg = autoru_parse(t)
+    drom, drom_pg = drom_parse(t)
+    all_result = autoru + drom
+    random.shuffle(all_result)
+    all_result.append(max(map(int, [autoru_pg, drom_pg])))
+    if all_result:
+        return render_template('temp.html', cars=all_result)
     else:
         return render_template('temp.html', cars=[{
                     'title': 'По вашему запросу ничего не найдено',
