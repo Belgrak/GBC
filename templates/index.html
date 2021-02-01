@@ -3,10 +3,12 @@
 <head>
 	<title>Good Buy Car!</title>
 	<link rel="stylesheet" type="text/css" href="main.css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </head>
 <body>
 <form method="POST" action="/cars">
-    <select name="marka">
+    <select name="marka" class="form-control">
         <option>Audi</option>
         <option>BMW</option>
         <option>Chery</option>
@@ -151,7 +153,7 @@
         <option>ТагАЗ</option>
         <option>УАЗ</option>
     </select>
-    <input type="submit">
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </body>
 </html>
