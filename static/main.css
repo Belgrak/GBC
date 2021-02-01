@@ -2,5 +2,8 @@
 	margin-right: 30px;
 }
 .first_line{
-	max-width: 400px;
+	max-width: 300px;
+}
+.form-group{
+	font-size: 2rem;
 }

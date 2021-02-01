@@ -12,9 +12,10 @@ dic = {'Ь':'', 'ь':'', 'Ъ':'', 'ъ':'', 'А':'A', 'а':'a', 'Б':'B', 'б':'b
        'ы':'yi', 'Э':'E', 'э':'e', 'Ю':'Yu', 'ю':'yu', 'Я':'Ya', 'я':'ya'}
 
 
-@app.route('/cars', methods=['POST'])
+@app.route('/cars')
 def get():
-    t = request.form['marka']
+    page = request.args.get('page', default='1', type=str)
+    t = request.args.get('marka', default='', type=str)
     t = t.replace(' ', '_')
     if t == 'ВАЗ_(LADA)':
         t = 'vaz'
@@ -25,12 +26,11 @@ def get():
     if t == 'Mercedes-Benz':
         t = 'mercedes'
     t = t.lower()
-    print(t)
-    autoru, autoru_pg = autoru_parse(t)
-    drom, drom_pg = drom_parse(t)
+    autoru, autoru_pg = autoru_parse(t, page)
+    drom, drom_pg = drom_parse(t, page)
     all_result = autoru + drom
     random.shuffle(all_result)
-    all_result.append(max(map(int, [autoru_pg, drom_pg])))
+    all_result.append((max(map(int, [autoru_pg, drom_pg])), t))
     if all_result:
         return render_template('temp.html', cars=all_result)
     else:
