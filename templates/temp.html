@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Cars</title>
-    <link rel="stylesheet" type="text/css" href="/static/main.css">
+    <link rel="stylesheet" href="/static/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </head>
 <body>
+<!--<div class="back"><a href="#"><img src="/static/arrow.png" alt=""></a></div>-->
 <div class="container">
     {% for car in cars %}
         <div class="card mb-3">
@@ -48,9 +49,11 @@
             </div>
         </div>
     {% endfor %}
+    {% if 'ничего' not in cars[0]['title']%}
     {% for i in range(1, cars[-1][0]) %}
-        <a href="/cars?marka={{ cars[-1][1] }}&page={{ i }}" class="btn btn-primary btn-md">{{ i }}</a>
+        <a href="/cars?marka={{ cars[-1][1] }}&page={{ i }}&sort={{ cars[-1][2] }}" class="btn btn-primary btn-md">{{ i }}</a>
     {% endfor %}
+    {% endif %}
 </div>
 </body>
 </html>

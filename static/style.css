@@ -6,6 +6,7 @@
 }
 .form-group{
 	font-size: 2rem;
+	text-align: center;
 }
 
 
@@ -16,4 +17,7 @@ select{
 	max-width: 1024px;
 }
 .back{
-	color: #EB0707;
+	position: fixed;
+	right: 10px;
+	top: 80%;
+}

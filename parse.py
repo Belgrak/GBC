@@ -2,13 +2,24 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def autoru_parse(n, page):
-    name = 'https://auto.ru/sankt-peterburg/cars/{}/all/?page={}'.format(n, page)
+def autoru_parse(n, page, sor, city):
+    if n == 'rolls-royce':
+        n = 'rolls_royce'
+    if sor == 'По умолчанию':
+        sor = ''
+    if sor == 'По цене ↑':
+        sor = '&sort=price-asc'
+    if sor == 'По цене ↓':
+        sor = '&sort=price-desc'
+    name = 'https://auto.ru/{}/cars/{}/all/?page={}{}'.format(city, n, page, sor)
     r = requests.get(name)
     if r.status_code == 200:
         r.encoding = 'utf8'
         soup = BeautifulSoup(r.text, 'html.parser')
-        count_of_pages = soup.select('[role="link"]')[-3].text
+        if len(soup.select('[role="link"]')) >= 3:
+            count_of_pages = soup.select('[role="link"]')[-3].text
+        else:
+            count_of_pages = '1'
         list_of_cars = []
         for i in soup.select('.ListingItem-module__main'):
             motor = i.select_one('.ListingItemTechSummaryDesktop__cell')
@@ -19,8 +30,10 @@ def autoru_parse(n, page):
             price = i.select_one('.ListingItemPrice-module__content')
             if price:
                 price = price.text
+                if 'от' in price:
+                    price = ''.join(price.split()[1:])
             else:
-                price = 0
+                price = '0₽'
             if photo != None:
                 list_of_cars.append({
                     'title': link.text,
@@ -118,16 +131,25 @@ def avito_parse(n):
     return list_of_cars'''
 
 
-def drom_parse(n, page):
+def drom_parse(n, page, sor, city):
     if n == 'mercedes':
         n = 'mercedes-benz'
     if n == 'vaz':
         n = 'lada'
-    name = 'https://spb.drom.ru/{}/page{}'.format(n, page)
+    if sor == 'По умолчанию':
+        sor = ''
+    if sor == 'По цене ↑':
+        sor = '?order=price'
+    if sor == 'По цене ↓':
+        sor = '?order=price&order_d=desc'
+    name = 'https://auto.drom.ru/region{}/{}/all/page{}/{}'.format(city, n, page, sor)
     r = requests.get(name)
     if r.status_code == 200:
         soup = BeautifulSoup(r.text, 'html.parser')
-        count_of_pages = soup.select('[data-ftid="component_pagination-item"]')[-1].text
+        if soup.select('[data-ftid="component_pagination-item"]'):
+            count_of_pages = soup.select('[data-ftid="component_pagination-item"]')[-1].text
+        else:
+            count_of_pages = '1'
         list_of_cars = []
         for i in soup.select('[data-ftid="bulls-list_bull"]'):
             desc = i.select_one('[data-ftid="bull_description"]').text.split(', ')
@@ -136,8 +158,10 @@ def drom_parse(n, page):
             price = i.select_one('[data-ftid="bull_price"]')
             if price:
                 price = price.text
+                if 'от' in price:
+                    price = ''.join(price.split()[1:])
             else:
-                price = 0
+                price = '0₽'
             if 'км' in desc[-1]:
                 km_age = desc[-1]
             else:
@@ -150,7 +174,7 @@ def drom_parse(n, page):
                     'year': title[1],
                     'km': km_age,
                     'motor': desc[0],
-                    'price': price,
+                    'price': price + '₽'
                 })
             else:
                 list_of_cars.append({
@@ -160,7 +184,7 @@ def drom_parse(n, page):
                     'year': title[1],
                     'km': km_age,
                     'motor': desc[0],
-                    'price': price
+                    'price': price + '₽'
                 })
         return list_of_cars, count_of_pages
     else:
