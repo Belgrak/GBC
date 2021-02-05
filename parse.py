@@ -1,5 +1,17 @@
 from bs4 import BeautifulSoup
 import requests
+'''
+r_wik = requests.get('https://ru.wikipedia.org/wiki/Коды_субъектов_Российской_Федерации')
+soup_wik = BeautifulSoup(r_wik.text, 'html.parser')
+for j in soup_wik.find_all('tr')[1:]:
+    if j.select_one('td'):
+        if 'Крым' in j.select('td')[0].text:
+            print('"{}": {}'.format(j.select('td')[0].text, '82'), end=', ')
+        else:
+            print('"{}": {}'.format(j.select('td')[0].text, str(int(j.select('td')[2].text.split(', ')[0]))), end=', ')
+exit()
+'''
+
 
 
 def autoru_parse(n, page, sor, city):
